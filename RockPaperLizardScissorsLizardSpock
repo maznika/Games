@@ -1,155 +1,223 @@
+#!/usr/bin/env python
+# The line above is called a "shebang"
+# This first line is used in all kinds of scripts and tells the place you are
+# running it from which interpreter to use(usually the shell like Bash.
+# (except on Windows because Windows is derp)
+# For instance a bash script would say #!/bin/bash, Ruby would be #!/usr/bin/eny ruby, etc
+# It makes it so when you run it, you don't have to type "python myscript.py", you can
+# just run it if it has executable permissions
 import time
+# the sys module allows you to exit if/when you want.  just call exit()
+from sys import exit
 from random import randint
-wins  = 0
-losses = 0
-  
-def game(wins, losses):
-        print "Choose your weapon! Please type Rock, Paper, Scissors, Lizard or Spock"
-        player_choice = raw_input()
-        computer_choice = randint(0,4)
-        print "Great - here we go!"
-        time.sleep(.75)
-        print "GET READY!"
-        time.sleep(.75)
-        print "Rock"
-        time.sleep(.5)
-        print "Paper"
-        time.sleep(.5)
-        print "Scissors"
-        time.sleep(.5)
-        print "Lizard"
-        time.sleep(.5)
-        print "Spock"
-        time.sleep(.5)
 
-        if player_choice == "Rock":
-                if computer_choice == 0:
-                        print "You both picked Rock - it's a draw!"
-                        end(wins, losses)
-                elif computer_choice == 1:
-                        print "Rock is covered by Paper - you lose!"
-                        losses += 1
-                        end(wins, losses)
-                elif computer_choice == 2:
-                        print "Rock smashes Scissors - you win!"
-                        wins += 1
-                        end(wins, losses)
-                elif computer_choice == 3:
-                        print "Rock squashes Lizard - you win!"
-                        wins += 1
-                        end(wins, losses)
-                elif computer_choice == 4:
-                        print "Rock is vaporized by Spock - you lose!"
-                        losses += 1
-                        end(wins, losses) 
+# Sorry if I've added more than you want or anything, just trying to throw out helpful ideas :)
 
-             #complete through here
+# This is an idea to handle the yes and no input since they perform similar functions
+# Being lazy is a good thing, so if you have something you need to perform more than once
+# that makes it a good candidate for putting it in its own function.
+def yes_or_no(input_value, count, wins, losses):
+    yes_no_responses = ['yes', 'no']
+    # This is basically the same as below for the game input
+    # The only difference is it also checks to see if they just mis-typed yes or no
+    # The .startswith() method is also a string method like .lower() and is super handy
+    while input_value not in yes_no_responses:
+        if input_value.startswith(('y', 'n')):
+            # The slashes in this string are called "escapes"
+            # Since the string is surrounded with single quotes, you can't type them
+            # like you would in a contraction without messing up the quotes
+            # The other slash is "escaping" the newline character allowing you to put
+            # a string across multiple lines
+            print 'You need to type out "yes" or "no", otherwise \
+                I don\'t know what to do with you'
+        print 'You gotta type "yes" or "no" derpsauce'
+        input_value = raw_input().lower()
+    if input_value == "yes":
+        game(wins, losses, count)
+    elif input_value == 'no' and count >= 1:
+        print "How will I ever understand humanity? Goodbye."
+        # This makes sure that if the player types "no" then the program will exit
+        exit()
+    else:
+        print "FINE, THEN! I DIDN'T WANT TO SHOW YOU MY COOL PROGRAM ANYWAY! GOOD DAY!"
+        # Same as above :)
+        exit()
 
- 
-        if player_choice == "Paper":
-                if computer_choice == 0:
-                        print "Paper covers Rock - you win!"
-                        wins += 1
-                        end(wins, losses)
-                elif computer_choice == 1:
-                        print "You both picked Paper - it's a draw!"
-                        end(wins, losses)
-                elif computer_choice == 2:
-                        print "Paper is cut by Scissors - you lose!"
-                        losses += 1
-                        end(wins, losses)
-                elif computer_choice == 3:
-                        print "Paper is eaten by Lizard - you lose!"
-                        losses += 1
-                        end(wins, losses)
-                elif computer_choice == 4:
-                        print "Paper disproves Spock - you win!"
-                        wins += 1
-                        end(wins, losses)         
+def game(wins, losses, count):
+    print "Choose your weapon! Please type Rock, Paper, Scissors, Lizard or Spock"
+    # Using .lower() here will force the input to all lower case.
+    # The player can enter anything like sPOcK and it will still work
+    # .lower() is a string method.  Since raw_input() takes in a string, you can use
+    #   the lower method on it.  There are TONS of string methods like this to play with
+    player_choice = raw_input().lower()
+    # Having a preset list of options to compare to can make error checking easy
+    game_options = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+    # Just in case someone enters 'taco' or something else, this while loop will catch it
+    # and prompt for input again until something valid is entered
+    # the "not in" comparison is an easy way to check for one value in (or not in) another
+    # It can also be used to check for sub-strings or numbers
+    # for instance you could say "if 'ock' in player_choice:" then do something with it
+    # This would technically trigger should the player enter 'rock' or 'spock'
+    while player_choice not in game_options:
+        print 'Ya gotta pick one of the options you schmuck! Try again with less fail!'
+        player_choice = raw_input().lower()
+    computer_choice = randint(0,4)
+    print "Great - here we go!"
+    time.sleep(.75)
+    print "GET READY!"
+    time.sleep(.75)
+    print "Rock"
+    time.sleep(.5)
+    print "Paper"
+    time.sleep(.5)
+    print "Scissors"
+    time.sleep(.5)
+    print "Lizard"
+    time.sleep(.5)
+    print "Spock"
+    time.sleep(.5)
 
-                #section complete
+    if player_choice == "rock":
+        if computer_choice == 0:
+                print "You both picked Rock - it's a draw!"
+                end(wins, losses, count)
+        elif computer_choice == 1:
+                print "Rock is covered by Paper - you lose!"
+                losses += 1
+                end(wins, losses, count)
+        elif computer_choice == 2:
+                print "Rock smashes Scissors - you win!"
+                wins += 1
+                end(wins, losses, count)
+        elif computer_choice == 3:
+                print "Rock squashes Lizard - you win!"
+                wins += 1
+                end(wins, losses, count)
+        elif computer_choice == 4:
+                print "Rock is vaporized by Spock - you lose!"
+                losses += 1
+                end(wins, losses, count)
 
- 		if player_choice == "Scissors":
- 		    	if computer_choice == 0:
-                	print "Scissors are smashed by Rock you win!"
-                        wins += 1
-                        end(wins, losses)
-                elif computer_choice == 1:
-                   	print "Scissors cuts Paper - you win!"
-                   	wins += 1
-                	end(wins, losses)
-                elif computer_choice == 2:
-                     	print "You both picked Scissors - it's a draw!"
-                     	end(wins, losses)
-                elif computer_choice == 3:
-                     	print "Scissors decapitates Lizard - you win!"
-                     	wins += 1
-                     	end(wins, losses)
-                elif computer_choice == 4:
-                	print "Scissors are smashed by Spock - you lose!"
-               		losses += 1
-               		end(wins, losses) 
+    if player_choice == "paper":
+        if computer_choice == 0:
+                print "Paper covers Rock - you win!"
+                wins += 1
+                end(wins, losses, count)
+        elif computer_choice == 1:
+                print "You both picked Paper - it's a draw!"
+                end(wins, losses, count)
+        elif computer_choice == 2:
+                print "Paper is cut by Scissors - you lose!"
+                losses += 1
+                end(wins, losses, count)
+        elif computer_choice == 3:
+                print "Paper is eaten by Lizard - you lose!"
+                losses += 1
+                end(wins, losses, count)
+        elif computer_choice == 4:
+                print "Paper disproves Spock - you win!"
+                wins += 1
+                end(wins, losses, count)
 
-                #section complete        
+    if player_choice == "scissors":
+        if computer_choice == 0:
+            print "Scissors are smashed by Rock you win!"
+            wins += 1
+            end(wins, losses, count)
+        elif computer_choice == 1:
+            print "Scissors cuts Paper - you win!"
+            wins += 1
+            end(wins, losses, count)
+        elif computer_choice == 2:
+            print "You both picked Scissors - it's a draw!"
+            end(wins, losses, count)
+        elif computer_choice == 3:
+            print "Scissors decapitates Lizard - you win!"
+            wins += 1
+            end(wins, losses, count)
+        elif computer_choice == 4:
+            print "Scissors are smashed by Spock - you lose!"
+            losses += 1
+            end(wins, losses, count)
 
-		if player_choice == "Lizard":
-			if computer_choice == 0:
-			print "Lizard is squashed by Rock - you lose!"
-			losses += 1
-			end(wins, losses)
-			elif computer_choice == 1:
-			print "Lizard eats Paper - you win!"
-			wins += 1
-			end(wins, losses)
-                elif computer_choice == 2:
-                        print "Lizard is decapitated by Scissors - you lose!"
-                        losses += 1
-                        end(wins,losses)
-                elif computer_choice == 3:
-                        print "You both picked Lizard - it's a draw!"
-                        end(wins, losses)
-                elif computer_choice == 4:
-                        print "Lizard poisons Spock - you win!"
-                        wins += 1
-                        end(wins, losses) 
+    if player_choice == "lizard":
+        if computer_choice == 0:
+            print "Lizard is squashed by Rock - you lose!"
+            losses += 1
+            end(wins, losses, count)
+        elif computer_choice == 1:
+            print "Lizard eats Paper - you win!"
+            wins += 1
+            end(wins, losses, count)
+        elif computer_choice == 2:
+            print "Lizard is decapitated by Scissors - you lose!"
+            losses += 1
+            end(wins,losses)
+        elif computer_choice == 3:
+            print "You both picked Lizard - it's a draw!"
+            end(wins, losses, count)
+        elif computer_choice == 4:
+            print "Lizard poisons Spock - you win!"
+            wins += 1
+            end(wins, losses, count)
 
- 		if player_choice == "Spock":
- 			if computer_choice == 0:
- 			print "Spock vaporizes Rock - you win!"
- 			wins += 1
- 			end(wins, losses)
-                elif computer_choice == 1:
-                        print "Spock is disproven by Paper - you lose!"
-                        losses += 1
-                        end(wins, losses)
-                elif computer_choice == 2:
-                        print "Spock smashes Scissors - you win!"
-                        wins += 1
-                        end(wins, losses)
-                elif computer_choice == 3:
-                        print "Spock is poisoned by Lizard - you lose!"
-                        losses += 1
-                        end(wins, losses)
-                elif computer_choice == 4:
-                        print "You both picked Spock - HIGHLY ILLOGICAL! It's a draw!"
-                        end(wins, losses)
+    if player_choice == "spock":
+        if computer_choice == 0:
+            print "Spock vaporizes Rock - you win!"
+            wins += 1
+            end(wins, losses, count)
+        elif computer_choice == 1:
+            print "Spock is disproven by Paper - you lose!"
+            losses += 1
+            end(wins, losses, count)
+        elif computer_choice == 2:
+            print "Spock smashes Scissors - you win!"
+            wins += 1
+            end(wins, losses, count)
+        elif computer_choice == 3:
+            print "Spock is poisoned by Lizard - you lose!"
+            losses += 1
+            end(wins, losses, count)
+        elif computer_choice == 4:
+            print "You both picked Spock - HIGHLY ILLOGICAL! It's a draw!"
+            end(wins, losses, count)
 
-def end(wins, losses):
-        print "Wins: " + str(wins) + " Losses: " + str(losses)
-        print "That was fun! Do you want to play again?"
-        player_input = raw_input()
-        if player_input == "yes":
-                game(wins, losses)
-        elif player_input == "no":
-		print "How will I ever understand humanity? Goodbye."	
- 
-print "Hi there! Would you like to play Rock Paper Scissors Lizard Spock?"
+def end(wins, losses, count):
+    count += 1
+    print "Wins: " + str(wins) + " Losses: " + str(losses)
+    print "That was fun! Do you want to play again?"
+    yes_or_no(raw_input().lower(), count, wins, losses)
+    # if player_input:
+    #     game(wins, losses)
+    # else:
+    #     print "How will I ever understand humanity? Goodbye."
+    #     # This makes sure that if the player types "no" then the program will exit
+    #     exit()
 
-player_input = raw_input()
-if player_input == "yes":
-        game(wins, losses)
-elif player_input == "no":  
-	print "FINE, THEN! I DIDN'T WANT TO SHOW YOU MY COOL PROGRAM ANYWAY! GOOD DAY!"      
+# This is the standard way to invoke a script when called directly
+# meaning if you are going to run the script by just typing the name in
+# __name__ is a sort of variable or property that is attached to something when run in Python
+# So this checks if the name of your script is '__main__', meaning it was run directly
+# instead of being called from another script/code
+# This way, it will only run the full game if you run this script directly
+# If I were to write another script, I could import the yes_or_no function up above and use it
+# without anything else in this file running
+if __name__ == '__main__':
+    wins = 0
+    losses = 0
+    round_counter = 0
+    print "Hi there! Would you like to play Rock Paper Scissors Lizard Spock?"
+    # This uses the yes_or_no function to validate the players input
+    # The raw_input() method is called to get player input
+    # Then it is converted to lower case
+    # Then it is passed to the yes_or_no function and it checks the input (explained above)
+    yes_or_no(raw_input().lower(), round_counter, wins, losses)
+    # if player_input:
+    #     game(wins, losses)
+    # else:
+    #     print "FINE, THEN! I DIDN'T WANT TO SHOW YOU MY COOL PROGRAM ANYWAY! GOOD DAY!"
+    #     # Same as exit above :)
+    #     exit()
 
 #need to add alternate versions of yes and no ("Yes, Y, y, YES, okay, OK, ok, Okay, OKAY" and "No, NO, N, n, NO")
 #need to add an error message for not understood input
